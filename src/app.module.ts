@@ -8,6 +8,7 @@ import { PatientModule } from './modules/patient/patient.module';
 import { MediaModule } from './modules/media/media.module';
 import { PlateModule } from './modules/plate/plate.module';
 import { AntibioticModule } from './modules/antibiotic/antibiotic.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AntibioticModule } from './modules/antibiotic/antibiotic.module';
     MediaModule,
     PlateModule,
     AntibioticModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

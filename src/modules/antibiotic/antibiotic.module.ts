@@ -7,7 +7,6 @@ import { AntibioticGetterService } from './services/antibiotic-getter.service';
 @Module({
   controllers: [AntibioticController],
   providers: [
-    // AntibioticApiService,
     AntibioticGetterService,
     AntibiotiCreatorService,
     AntibioticApiService,

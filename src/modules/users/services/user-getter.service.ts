@@ -4,7 +4,7 @@ import { PaginationDto } from 'src/common/filter/pagination/pagination-param.dto
 import { UserFilterDto } from '../dtos/user-filter.dto';
 import { FindAllUserDto } from '../dtos/find-all-user.dto';
 import { selectUserValidator } from '../validators/select-user-validator';
-import { RawUser } from '../dtos/user.dto';
+// import { RawUser } from '../dtos/user.dto';
 
 @Injectable()
 export class UserGetterService {
@@ -41,10 +41,17 @@ export class UserGetterService {
     return new FindAllUserDto(count, data);
   }
 
-  async findById(id: number): Promise<RawUser> {
+  async findById(id: number) {
     return await this._prisma.user.findUniqueOrThrow({
       where: { id },
-      select: selectUserValidator(),
+      select: { ...selectUserValidator(), password: true },
+    });
+  }
+
+  async findByEmail(email: string) {
+    return await this._prisma.user.findUnique({
+      where: { email },
+      select: { ...selectUserValidator(), password: true },
     });
   }
 }
