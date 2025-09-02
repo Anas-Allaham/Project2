@@ -4,12 +4,10 @@ import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 export class AntibioticGetterService {
   constructor(private readonly _prisma: PrismaService) {}
 
-  //   async get() {
-  //     const raw = await this._prisma.antibiotic.create({ data });
-  //     return raw;
-  //   }
-}
-
-export interface ICreateAntibiotic {
-  name: string;
+  async get(id: number) {
+    const raw = await this._prisma.antibiotic.findUniqueOrThrow({
+      where: { id },
+    });
+    return raw;
+  }
 }
