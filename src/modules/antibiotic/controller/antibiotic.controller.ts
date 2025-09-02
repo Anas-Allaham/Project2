@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { AntibioticApiService } from './antibiotic-api.service';
 import { AntiBioticDto } from '../dtos/antibiotic.dto';
@@ -12,14 +12,15 @@ export class AntibioticController {
   @Post()
   @ApiResponse({ type: AntiBioticDto })
   @ApiOperation({ summary: 'Create a new plate' })
-  async create(data: CreateAntiBioticDto) {
+  async create(@Body() data: CreateAntiBioticDto) {
+    console.log(data);
     return this._antibioticApiService.create(data);
   }
 
-  @Get()
+  @Get(':id')
   @ApiResponse({ type: AntiBioticDto })
   @ApiOperation({ summary: 'Create a new plate' })
-  async get(id: number) {
+  async get(@Param('id') id: number) {
     return this._antibioticApiService.get(id);
   }
 }
