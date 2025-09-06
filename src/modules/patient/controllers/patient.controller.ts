@@ -15,7 +15,7 @@ export class PatientController {
   @ApiResponse({ type: CreatePatientDto })
   @ApiOperation({ summary: 'Create a new patient' })
   async create(@Body() data: CreatePatientDto) {
-    return this._patientApiService.create(data);
+    return await this._patientApiService.create(data);
   }
 
   // @Get()

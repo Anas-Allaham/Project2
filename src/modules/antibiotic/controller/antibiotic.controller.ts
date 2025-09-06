@@ -13,14 +13,13 @@ export class AntibioticController {
   @ApiResponse({ type: AntiBioticDto })
   @ApiOperation({ summary: 'Create a new plate' })
   async create(@Body() data: CreateAntiBioticDto) {
-    console.log(data);
-    return this._antibioticApiService.create(data);
+    return await this._antibioticApiService.create(data);
   }
 
   @Get(':id')
   @ApiResponse({ type: AntiBioticDto })
   @ApiOperation({ summary: 'Create a new plate' })
   async get(@Param('id') id: number) {
-    return this._antibioticApiService.get(id);
+    return await this._antibioticApiService.get(id);
   }
 }

@@ -61,14 +61,17 @@ model Patient {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
   deletedAt DateTime?
+
+  @@unique([firstName, lastName])
 }
 
 model Plate {
-  id        Int    @id @default(autoincrement())
+  id        Int @id @default(autoincrement())
   patientId Int
-  userId    Int
-  mediaId   Int    @unique
-  notes     String
+
+  userId  Int
+  mediaId Int    @unique
+  notes   String
 
   result  Result?
   image   Media   @relation(fields: [mediaId], references: [id])

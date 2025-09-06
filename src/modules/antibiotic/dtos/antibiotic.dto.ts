@@ -7,17 +7,17 @@ export class AntiBioticDto {
   @ApiProperty()
   name: string;
 
-  @ApiProperty()
-  createdAt: Date;
+  // @ApiProperty()
+  // createdAt: Date;
 
-  @ApiProperty()
-  updatedAt: Date;
+  // @ApiProperty()
+  // updatedAt: Date;
 
   constructor(raw: RawAntiBiotic) {
     this.id = raw.id;
     this.name = raw.name;
-    this.createdAt = raw.createdAt;
-    this.updatedAt = raw.updatedAt;
+    // this.createdAt = raw.createdAt;
+    // this.updatedAt = raw.updatedAt;
   }
 }
 
@@ -25,8 +25,8 @@ export class AntiBioticDetectionDto {
   @ApiProperty()
   id: number;
 
-  @ApiProperty()
-  plateId: number;
+  // @ApiProperty()
+  // plateId: number;
 
   @ApiProperty()
   antibiotic: AntiBioticDto;
@@ -34,20 +34,27 @@ export class AntiBioticDetectionDto {
   @ApiProperty()
   value: number;
 
-  @ApiProperty()
-  createdAt: Date;
+  // @ApiProperty()
+  // createdAt: Date;
 
-  @ApiProperty()
-  updatedAt: Date;
+  // @ApiProperty()
+  // updatedAt: Date;
 
   constructor(raw: RawAntiBioticDetection) {
     this.id = raw.id;
     this.antibiotic = new AntiBioticDto(raw.antibiotic);
-    this.plateId = raw.plateId;
-    this.createdAt = raw.createdAt;
-    this.updatedAt = raw.updatedAt;
+    this.value = raw.value;
+    // this.plateId = raw.plateId;
+    // this.createdAt = raw.createdAt;
+    // this.updatedAt = raw.updatedAt;
   }
 }
 
-export type RawAntiBioticDetection = Omit<AntiBioticDetectionDto, ''> & {};
-export type RawAntiBiotic = Omit<AntiBioticDto, ''> & {};
+export type RawAntiBioticDetection = Omit<
+  AntiBioticDetectionDto,
+  'createdAt' | 'updatedAt' | 'deletedAt' | 'plateId'
+> & {};
+export type RawAntiBiotic = Omit<
+  AntiBioticDto,
+  'createdAt' | 'updatedAt' | 'deletedAt' | 'plateId'
+> & {};

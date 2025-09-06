@@ -15,9 +15,9 @@ export class PatientApiService {
     private readonly _patientDelete: PatientDeleteService,
   ) {}
 
-  async create(data: CreatePatientDto): Promise<PatientDto> {
-    const raw = await this._patientCreator.create(data);
-    return new PatientDto(raw);
+  async create(data: CreatePatientDto) {
+    // const raw = await this._patientCreator.create(data);
+    // return new PatientDto(raw);
   }
   async get(patientId: number): Promise<PatientDto> {
     const raw = await this._patientGetter.findById(patientId);

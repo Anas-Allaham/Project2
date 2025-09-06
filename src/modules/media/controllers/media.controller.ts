@@ -35,12 +35,12 @@ export class MediaController {
     )
     file: Express.Multer.File,
   ): Promise<MediaDto> {
-    return this._mediaApiService.upload(file);
+    return await this._mediaApiService.upload(file);
   }
 
   @Get(':id')
   @ApiResponse({ type: MediaDto })
   async get(@Param('id') id: number) {
-    return this._mediaApiService.get(id);
+    return await this._mediaApiService.get(id);
   }
 }

@@ -30,4 +30,4 @@ export class PatientDto {
   }
 }
 
-export type RawPatient = Omit<Patient, ''> & {};
+export type RawPatient = Omit<Patient, 'deletedAt'> & {};

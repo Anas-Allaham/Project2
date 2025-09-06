@@ -3,12 +3,16 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class CreatePlateDto {
   @ApiProperty()
-  @IsNumber()
-  patientId: number;
+  @IsString()
+  patientFirstName: string;
 
   @ApiProperty()
-  @IsNumber()
-  userId: number;
+  @IsString()
+  patientLastName: string;
+
+  @ApiProperty()
+  @IsString()
+  patientNumber: string;
 
   @ApiProperty()
   @IsNumber()
