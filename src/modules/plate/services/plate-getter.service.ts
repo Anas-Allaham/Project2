@@ -8,6 +8,8 @@ import { Prisma } from '@prisma/client';
 import { FindAllPlateDto } from '../dtos/find-all-plates.dto';
 import { selectResultValidator } from '../validators/select-result.validator';
 import { selectFullPlateValidator } from '../validators/full-plate.validator';
+// import { equal } from 'assert';
+// import { equals } from 'class-validator';
 
 @Injectable()
 export class PlateGetterService {
@@ -27,56 +29,86 @@ export class PlateGetterService {
     });
   }
 
-  async findAll(pagination: PaginationDto, filter: PlateFilterDto) {
-    const search = filter?.search?.trim();
-    const start = filter?.startDate ? new Date(filter.startDate) : undefined;
-    const end = filter?.endDate ? new Date(filter.endDate) : undefined;
+  safeStr = (v?: string) => v?.trim() || undefined;
+  safeDate = (v?: string) => {
+    if (!v) return undefined;
+    const d = new Date(v);
+    return isNaN(d.getTime()) ? undefined : d;
+  };
 
-    const where: Prisma.PlateWhereInput = {
-      ...(search
-        ? {
-            OR: [
-              { notes: { contains: search } },
-              {
-                patient: {
-                  OR: [
-                    { firstName: { contains: filter.fistName } },
-                    { lastName: { contains: filter.lastName } },
-                    { number: { contains: search } },
-                  ],
-                },
-              },
-              {
-                user: {
-                  OR: [
-                    { name: { contains: search } },
-                    { email: { contains: search } },
-                  ],
-                },
-              },
-              {
-                image: {
-                  OR: [
-                    { name: { contains: search } },
-                    { path: { contains: search } },
-                  ],
-                },
-              },
-            ],
-          }
-        : {}),
-      ...(filter?.userId ? { userId: filter.userId } : {}),
-      ...(filter?.status
-        ? { result: { is: { status: filter.status } } } // one-to-one relation filter
-        : {}),
-      ...((start || end) && {
+  async findAll(pagination: PaginationDto, filter: PlateFilterDto) {
+    const search = this.safeStr(filter?.search);
+    const firstName = this.safeStr((filter as any)?.firstName);
+    const lastName = this.safeStr((filter as any)?.lastName);
+    const start = this.safeDate(filter?.startDate);
+    const end = this.safeDate(filter?.endDate);
+    const andFilters: Prisma.PlateWhereInput[] = [];
+
+    if (firstName || lastName) {
+      andFilters.push({
+        patient: {
+          ...(firstName ? { firstName: { contains: firstName } } : {}),
+          ...(lastName ? { lastName: { contains: lastName } } : {}),
+        },
+      });
+    }
+
+    if (filter?.userId) {
+      andFilters.push({ userId: filter.userId });
+    }
+
+    if (filter?.status) {
+      andFilters.push({ result: { is: { status: filter.status } } });
+    }
+
+    if (start || end) {
+      andFilters.push({
         createdAt: {
           ...(start ? { gte: start } : {}),
           ...(end ? { lte: end } : {}),
         },
-      }),
-    };
+      });
+    }
 
+    // OR bucket: global free-text search across multiple fields/relations
+    const orFilters: Prisma.PlateWhereInput[] = [];
+
+    if (search) {
+      orFilters.push(
+        { notes: { contains: search } },
+        // {
+        //   patient: {
+        //     OR: [
+        //       { firstName: { contains: search } },
+        //       { lastName: { contains: search } },
+        //       { number: { contains: search } },
+        //     ],
+        //   },
+        // },
+
+        {
+          user: {
+            OR: [
+              { name: { contains: search } },
+              { email: { contains: search } },
+            ],
+          },
+        },
+        {
+          image: {
+            OR: [
+              { name: { contains: search } },
+              { path: { contains: search } },
+            ],
+          },
+        },
+      );
+    }
+
+    const where: Prisma.PlateWhereInput = {
+      ...(andFilters.length ? { AND: andFilters } : {}),
+      ...(orFilters.length ? { OR: orFilters } : {}),
+    };
     const [raws, count] = await Promise.all([
       this._prisma.plate.findMany({
         where,

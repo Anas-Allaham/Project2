@@ -73,6 +73,8 @@ model Plate {
   mediaId Int    @unique
   notes   String
 
+  excel_path String?
+
   result  Result?
   image   Media   @relation(fields: [mediaId], references: [id])
   patient Patient @relation(fields: [patientId], references: [id])
@@ -102,6 +104,7 @@ model AntibioticDetection {
   antibiotic   Antibiotic @relation(fields: [antibioticId], references: [id])
   Result       Result     @relation(fields: [resultId], references: [id])
   value        Float
+  sir                  String                @default("R")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()

@@ -12,7 +12,6 @@ import {
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { PlateDto } from '../dtos/plate.dto';
 import { CreatePlateDto } from '../dtos/create-plate.dto';
-import { ResultDto } from '../dtos/result.dto';
 import { GetUser } from 'src/common/decorators/req-user.decorator';
 import { JwtAuthGuard } from 'src/modules/auth/services/jwt-auth.guard';
 import { FindAllPlateDto } from '../dtos/find-all-plates.dto';
@@ -26,18 +25,18 @@ export class PlateController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @ApiResponse({ type: ResultDto })
+  @ApiResponse({ type: PlateDto })
   @ApiOperation({ summary: 'Create a new plate' })
   async create(@GetUser() reqUser: number, @Body() data: CreatePlateDto) {
     return { result: await this._plateApiService.create(reqUser, data) };
   }
 
-  @Post('Process')
-  @ApiResponse({ type: ResultDto })
-  @ApiOperation({ summary: 'Start Processing' })
-  async process(@Param('id') id: number) {
-    return await this._plateApiService.process(id);
-  }
+  // @Post('Process')
+  // @ApiResponse({ type: ResultDto })
+  // @ApiOperation({ summary: 'Start Processing' })
+  // async process(@Param('id') id: number) {
+  //   return await this._plateApiService.process(id);
+  // }
 
   @Get(':id')
   @ApiResponse({ type: PlateDto })

@@ -25,8 +25,8 @@ export class AntiBioticDetectionDto {
   @ApiProperty()
   id: number;
 
-  // @ApiProperty()
-  // plateId: number;
+  @ApiProperty({ required: false })
+  sir?: string;
 
   @ApiProperty()
   antibiotic: AntiBioticDto;
@@ -44,7 +44,7 @@ export class AntiBioticDetectionDto {
     this.id = raw.id;
     this.antibiotic = new AntiBioticDto(raw.antibiotic);
     this.value = raw.value;
-    // this.plateId = raw.plateId;
+    this.sir = raw.sir ?? null;
     // this.createdAt = raw.createdAt;
     // this.updatedAt = raw.updatedAt;
   }

@@ -3,6 +3,7 @@ import { Plate } from '@prisma/client';
 import { RawResult, ResultDto } from './result.dto';
 import { MediaDto, RawMedia } from 'src/modules/media/dtos/media.dto';
 import { PatientDto, RawPatient } from 'src/modules/patient/dtos/patient.dto';
+import { IsOptional } from 'class-validator';
 
 export class PlateDto {
   @ApiProperty()
@@ -20,6 +21,10 @@ export class PlateDto {
   @ApiProperty()
   notes: string;
 
+  @ApiProperty({ required: false })
+  @IsOptional()
+  excel_path?: string;
+
   @ApiProperty({ type: ResultDto })
   result: ResultDto;
 
@@ -35,6 +40,7 @@ export class PlateDto {
     this.patient = new PatientDto(raw.patient);
     this.notes = raw.notes;
     this.image = new MediaDto(raw.image);
+    this.excel_path = raw.excel_path ?? null;
     this.createdAt = raw.createdAt;
     this.updatedAt = raw.updatedAt;
   }

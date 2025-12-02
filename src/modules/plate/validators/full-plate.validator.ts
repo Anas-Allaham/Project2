@@ -8,6 +8,7 @@ export const selectFullPlateValidator = () => {
     patient: { select: selectPatientValidator() },
     result: { select: selectResultValidator() },
     id: true,
+    excel_path: true,
     image: { select: selectMediaValidator() },
     notes: true,
     createdAt: true,

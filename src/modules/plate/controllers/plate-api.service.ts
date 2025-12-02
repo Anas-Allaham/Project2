@@ -24,30 +24,34 @@ export class PlateApiService {
     private readonly _prisma: PrismaService,
   ) {}
 
-  async create(userId: number, data: CreatePlateDto): Promise<ResultDto> {
-    const raw = await this._prisma.$transaction(async (prisma) => {
-      const patient = await this._patientCreator.create(prisma, {
-        firstName: data.patientFirstName,
-        lastName: data.patientLastName,
-        number: data.patientNumber,
-      });
-      const result = await this._plateCreator.create(prisma, {
-        patientId: patient.id,
-        userId: userId,
-        mediaId: data.mediaId,
-        notes: data.notes,
-      });
+  async create(userId: number, data: CreatePlateDto): Promise<PlateDto> {
+    // console.log(userId, data);
+    const raw = await this._prisma.$transaction(
+      async (prisma) => {
+        const patient = await this._patientCreator.create(prisma, {
+          firstName: data.patientFirstName,
+          lastName: data.patientLastName,
+          number: data.patientNumber,
+        });
+        const result = await this._plateCreator.create(prisma, {
+          patientId: patient.id,
+          userId: userId,
+          mediaId: data.mediaId,
+          notes: data.notes,
+        });
 
-      return result;
-    });
+        return result;
+      },
+      { maxWait: 20_0000, timeout: 120_0000 }, // إن اضطررت
+    );
     // const raw = await this._plateCreator.create(data);
-    return new ResultDto(raw);
+    return new PlateDto(raw);
   }
 
-  async process(id: number): Promise<ResultDto> {
-    const raw = await this._plateCreator.process(id);
-    return new ResultDto(raw);
-  }
+  // async process(id: number): Promise<ResultDto> {
+  //   const raw = await this._plateCreator.process(id);
+  //   return new ResultDto(raw);
+  // }
 
   async get(plateId: number): Promise<PlateDto> {
     const raw = await this._plateGetter.findById(plateId);

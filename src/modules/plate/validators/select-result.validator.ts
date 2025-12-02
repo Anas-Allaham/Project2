@@ -6,7 +6,7 @@ export const selectResultValidator = () => {
     id: true,
     antibioticDetections: { select: selectAntibioticDetectionValidator() },
     status: true,
-    plateId: true,
+    // sir: true,
     createdAt: true,
     updatedAt: true,
   });

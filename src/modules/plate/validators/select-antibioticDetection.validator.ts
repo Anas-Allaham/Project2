@@ -6,5 +6,6 @@ export const selectAntibioticDetectionValidator = () => {
     id: true,
     antibiotic: { select: selectAntibioticValidator() },
     value: true,
+    sir: true,
   });
 };

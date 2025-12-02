@@ -9,14 +9,17 @@ export class ResultDto {
   @ApiProperty()
   id: number;
 
-  @ApiProperty()
-  plateId: number;
+  // @ApiProperty()
+  // plateId: number;
 
   @ApiProperty()
   status: string;
 
-  @ApiProperty()
-  antibioticDetections: AntiBioticDetectionDto[];
+  // @ApiProperty({ required: false })
+  // sir?: string;
+
+  @ApiProperty({ type: () => [AntiBioticDetectionDto] })
+  antibioticDetections: AntiBioticDetectionDto[] = [];
 
   @ApiProperty()
   createdAt: Date;
@@ -24,19 +27,18 @@ export class ResultDto {
   @ApiProperty()
   updatedAt: Date;
 
-  constructor(raw: RawResult) {
-    const antibioticDetections = raw.antibioticDetections?.map(
-      (antibiotic) => new AntiBioticDetectionDto(antibiotic),
-    );
+  constructor(raw?: RawResult | null) {
+    if (!raw) return; // <- important: handle null Result
     this.id = raw.id;
-    this.plateId = raw.plateId;
+    // this.sir = raw.sir;
     this.status = raw.status;
     this.createdAt = raw.createdAt;
     this.updatedAt = raw.updatedAt;
-    this.antibioticDetections = antibioticDetections;
+    this.antibioticDetections =
+      raw.antibioticDetections?.map((a) => new AntiBioticDetectionDto(a)) ?? [];
   }
 }
 
-export type RawResult = Omit<Result, 'deletedAt'> & {
+export type RawResult = Omit<Result, 'deletedAt' | 'plateId'> & {
   antibioticDetections?: RawAntiBioticDetection[];
 };

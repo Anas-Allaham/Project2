@@ -5,6 +5,8 @@ import { PlateGetterService } from './services/plate-getter.service';
 import { PlateCreatorService } from './services/plate-creator.service';
 import { PatientModule } from '../patient/patient.module';
 import { PlateUpdatorService } from './services/plate-updater.service';
+import { CommonModule } from '../common/common.module';
+import { MediaModule } from '../media/media.module';
 
 @Module({
   controllers: [PlateController],
@@ -15,6 +17,6 @@ import { PlateUpdatorService } from './services/plate-updater.service';
     PlateUpdatorService,
   ],
   exports: [PlateGetterService, PlateCreatorService, PlateUpdatorService],
-  imports: [PatientModule],
+  imports: [PatientModule, CommonModule, MediaModule],
 })
 export class PlateModule {}

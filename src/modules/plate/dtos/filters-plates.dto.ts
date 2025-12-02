@@ -16,7 +16,7 @@ export class PlateFilterDto extends SearchDto {
   })
   @IsOptional()
   @IsString()
-  fistName?: string;
+  firstName?: string;
 
   @ApiProperty({
     required: false,
